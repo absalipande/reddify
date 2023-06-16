@@ -1,8 +1,9 @@
+import Navbar from '@/components/Navbar';
+import { cn } from '@/lib/utils';
 import { Inter } from 'next/font/google';
+import { Toaster } from '@/components/ui/Toaster';
 
 import '@/styles/globals.css';
-import { cn } from '@/lib/utils';
-import Navbar from '@/components/Navbar';
 
 const inter = Inter({ subsets: ['latin'] });
 
@@ -25,13 +26,14 @@ export default function RootLayout({
       )}
     >
       <head>
-        <link rel='icon' href='/book.png' />
+        <link rel='icon' href='/reddit.png' />
       </head>
       <body className='min-h-screen pt-12 bg-slate-50 antialiased'>
         <Navbar />
         <div className='container max-w-7xl mx-auto h-full pt-12'>
           {children}
         </div>
+        <Toaster />
       </body>
     </html>
   );

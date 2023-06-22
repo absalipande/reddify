@@ -17,7 +17,7 @@ const MiniCreatePost: FC<MiniCreatePostProps> = ({ session }) => {
   const pathname = usePathname();
 
   return (
-    <li className='overflow-hidden rounded-md border border-gray-300 bg-white shadow' style={{ listStyle: 'none' }}>
+    <li className='overflow-hidden rounded-md bg-white shadow'>
       <div className='h-full px-6 py-4 flex justify-between gap-6'>
         <div className='relative'>
           <UserAvatar
@@ -39,13 +39,13 @@ const MiniCreatePost: FC<MiniCreatePostProps> = ({ session }) => {
           onClick={() => router.push(pathname + '/submit')}
           variant='ghost'
         >
-          <ImageIcon className='text-zinc-700' />
+          <ImageIcon className='text-zinc-600' />
         </Button>
         <Button
           onClick={() => router.push(pathname + '/submit')}
           variant='ghost'
         >
-          <Link2 className='text-zinc-700' />
+          <Link2 className='text-zinc-600' />
         </Button>
       </div>
     </li>

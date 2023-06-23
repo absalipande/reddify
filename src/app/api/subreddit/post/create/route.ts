@@ -1,21 +1,22 @@
 import { getAuthSession } from '@/lib/auth';
 import { db } from '@/lib/db';
-import { SubredditSubscriptionValidator } from '@/lib/validators/subreddit';
+import { PostValidator } from '@/lib/validators/post';
 import { z } from 'zod';
 
 export async function POST(req: Request) {
   try {
     const session = await getAuthSession();
 
-    // check first if the session is authorized
+    // check if user is authenticated
     if (!session?.user) {
       return new Response('Unauthorized', { status: 401 });
     }
 
+    // Parse the req.body using PostValidator
     const body = await req.json();
-    const { subredditId } = SubredditSubscriptionValidator.parse(body);
+    const { title, content, subredditId } = PostValidator.parse(body);
 
-    // check if the user is already subscribed
+    // verify if the user is subscribed first to the subreddit
     const existingSubscription = await db.subscription.findFirst({
       where: {
         subredditId,
@@ -23,28 +24,29 @@ export async function POST(req: Request) {
       },
     });
 
-    if (existingSubscription) {
-      return new Response('Already subscribed to this subreddit.', {
-        status: 400,
-      });
+    // if the user is not subscribed, return an error response
+    if (!existingSubscription) {
+      return new Response('Subscribe to post', { status: 403 });
     }
 
-    // create subscription and associate it to the user/creator
-    await db.subscription.create({
+    // create a new post in the database
+    await db.post.create({
       data: {
+        title,
+        content,
+        authorId: session.user.id,
         subredditId,
-        userId: session.user.id,
       },
     });
 
-    return new Response(subredditId);
+    return new Response('OK');
   } catch (error) {
     if (error instanceof z.ZodError) {
       return new Response(error.message, { status: 400 });
     }
 
     return new Response(
-      'Could not subscribe to subreddit at this time. Please try again later.',
+      'Unable to post to subreddit right now. Please try again later.',
       { status: 500 }
     );
   }

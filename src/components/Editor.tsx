@@ -205,6 +205,7 @@ export const Editor: React.FC<EditorProps> = ({ subredditId }) => {
               // @ts-ignore
               _titleRef.current = e;
             }}
+            {...rest}
             placeholder='Title'
             className='w-full resize-none appearance-none overflow-hidden bg-transparent text-3xl font-bold focus:outline-none'
           />

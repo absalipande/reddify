@@ -5,12 +5,13 @@ import { notFound } from 'next/navigation';
 import PostFeed from '../PostFeed';
 
 const CustomFeed = async () => {
-  // get user session
+  // Get user session
   const session = await getAuthSession();
 
-  // only render this if session exist
+  // Only render this if session exist
   if (!session) return notFound();
 
+  // Retrieve all the communities that the user subscribed to
   const followedCommunities = await db.subscription.findMany({
     where: {
       userId: session.user.id,
@@ -20,6 +21,7 @@ const CustomFeed = async () => {
     },
   });
 
+  // Retrieve all the posts from the followed communities
   const posts = await db.post.findMany({
     where: {
       subreddit: {

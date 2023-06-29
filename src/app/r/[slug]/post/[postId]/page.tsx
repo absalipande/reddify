@@ -1,5 +1,6 @@
 import EditorOutput from '@/components/EditorOutput';
 import PostVoteServer from '@/components/post-vote/PostVoteServer';
+import CommentsSection from '@/components/CommentsSection';
 import { buttonVariants } from '@/components/ui/Button';
 import { db } from '@/lib/db';
 import { redis } from '@/lib/redis';
@@ -78,7 +79,7 @@ const SubmitRedditPost = async ({ params }: SubmitRedditPostPageProps) => {
               <Loader2 className='h-5 w-5 animate-spin text-zinc-500' />
             }>
             {/* @ts-expect-error Server Component */}
-            {/* <CommentsSection postId={post?.id ?? cachedPost.id} /> */}
+            <CommentsSection postId={post?.id ?? cachedPost.id} />
           </Suspense>
         </div>
       </div>

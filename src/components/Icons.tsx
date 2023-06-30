@@ -3,6 +3,7 @@ import { LucideProps, MessageSquare, User } from 'lucide-react';
 export const Icons = {
   user: User,
   logo: (props: React.ImgHTMLAttributes<HTMLImageElement>) => (
+    // eslint-disable-next-line @next/next/no-img-element
     <img src='/reddit.png' alt='Logo' {...props} />
   ),
   google: (props: LucideProps) => (

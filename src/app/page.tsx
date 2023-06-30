@@ -3,8 +3,8 @@ import { getAuthSession } from '@/lib/auth';
 import { Home as HomeIcon } from 'lucide-react';
 import Link from 'next/link';
 
-import GeneralFeed from '@/components/hompage/GeneralFeed';
-import CustomFeed from '@/components/hompage/CustomFeed';
+import GeneralFeed from '@/components/homepage/GeneralFeed';
+import CustomFeed from '@/components/homepage/CustomFeed';
 
 export default async function Home() {
   const session = await getAuthSession();

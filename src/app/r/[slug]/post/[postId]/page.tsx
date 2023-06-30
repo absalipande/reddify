@@ -59,7 +59,7 @@ const SubmitRedditPost = async ({ params }: SubmitRedditPostPageProps) => {
                 include: {
                   votes: true,
                 },
-              })
+              });
             }}
           />
         </Suspense>
@@ -77,14 +77,15 @@ const SubmitRedditPost = async ({ params }: SubmitRedditPostPageProps) => {
           <Suspense
             fallback={
               <Loader2 className='h-5 w-5 animate-spin text-zinc-500' />
-            }>
+            }
+          >
             {/* @ts-expect-error Server Component */}
             <CommentsSection postId={post?.id ?? cachedPost.id} />
           </Suspense>
         </div>
       </div>
     </div>
-  )
+  );
 };
 
 function PostVoteShell() {

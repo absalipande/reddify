@@ -1,8 +1,8 @@
-import type { Post, Subreddit, User, Vote, Comment } from '@prisma/client'
+import type { Post, Subreddit, User, Vote, Comment } from '@prisma/client';
 
 export type ExtendedPost = Post & {
-    subreddit: Subreddit
-    votes: Vote[]
-    author: User
-    comments: Comment[]
-}
+  subreddit: Subreddit;
+  votes: Vote[];
+  author: User;
+  comments: Comment[];
+};

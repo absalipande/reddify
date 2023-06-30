@@ -14,7 +14,7 @@ import { toast } from '@/hooks/use-toast';
 const Page = () => {
   const router = useRouter();
   const [input, setInput] = useState<string>('');
-  const { loginToast } = useCustomToasts()
+  const { loginToast } = useCustomToasts();
 
   const { mutate: createCommunity, isLoading } = useMutation({
     mutationFn: async () => {
@@ -56,8 +56,8 @@ const Page = () => {
       });
     },
     onSuccess: (data) => {
-      router.push(`/r/${data}`)
-    }
+      router.push(`/r/${data}`);
+    },
   });
 
   return (

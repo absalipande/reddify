@@ -38,6 +38,34 @@ const PostComment: FC<PostCommentProps> = ({
   const { data: session } = useSession();
   const [isReplying, setIsReplying] = useState<boolean>(false);
   const commentRef = useRef<HTMLDivElement>(null);
+  const [input, setInput] = useState<string>(`@${comment.author.username}`);
+  const router = useRouter();
+  useOnClickOutside(commentRef, () => {
+    setIsReplying(false);
+  });
+
+  const { mutate: postComment, isLoading } = useMutation({
+    mutationFn: async ({ postId, text, replyToId }: CommentRequest) => {
+      const payload: CommentRequest = { postId, text, replyToId };
+
+      const { data } = await axios.patch(
+        `/api/subreddit/post/comment`,
+        payload
+      );
+      return data;
+    },
+    onError: () => {
+      return toast({
+        title: 'Something went wrong.',
+        description: 'Failed to create the comment. Please try again.',
+        variant: 'destructive',
+      });
+    },
+    onSuccess: () => {
+      router.refresh();
+      setIsReplying(false);
+    },
+  });
 
   return (
     <div ref={commentRef} className='flex flex-col'>
@@ -60,7 +88,71 @@ const PostComment: FC<PostCommentProps> = ({
         </div>
       </div>
 
-      <p className='text-sm text-zinc-900 mt-2 ml-12'>{comment.text}</p>
+      <p className='text-sm text-zinc-900 mt-2 ml-8'>{comment.text}</p>
+
+      <div className='flex gap-2 items-center'>
+        <CommentVotes
+          commentId={comment.id}
+          votesAmount={votesAmount}
+          currentVote={currentVote}
+        />
+
+        <Button
+          onClick={() => {
+            if (!session) return router.push('/sign-in');
+            setIsReplying(true);
+          }}
+          variant='ghost'
+          size='xs'
+        >
+          <MessageSquare className='h-4 w-4 mr-1' />
+        </Button>
+      </div>
+
+      {isReplying ? (
+        <div className='grid w-full gap-1.5'>
+          <Label htmlFor='comment'>Your comment</Label>
+          <div className='mt-2'>
+            <Textarea
+              onFocus={(e) => {
+                e.currentTarget.setSelectionRange(
+                  e.currentTarget.value.length,
+                  e.currentTarget.value.length
+                );
+              }}
+              id='comment'
+              autoFocus
+              value={input}
+              onChange={(e) => setInput(e.target.value)}
+              rows={1}
+              placeholder='What are your thoughts'
+            />
+
+            <div className='mt-2 flex justify-end gap-2'>
+              <Button
+                tabIndex={-1}
+                variant='subtle'
+                onClick={() => setIsReplying(false)}
+              >
+                Cancel
+              </Button>
+              <Button
+                isLoading={isLoading}
+                onClick={() => {
+                  if (!input) return;
+                  postComment({
+                    postId,
+                    text: input,
+                    replyToId: comment.replyToId ?? comment.id, // default to top-level comment
+                  });
+                }}
+              >
+                Post
+              </Button>
+            </div>
+          </div>
+        </div>
+      ) : null}
     </div>
   );
 };

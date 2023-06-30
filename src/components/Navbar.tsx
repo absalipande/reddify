@@ -4,6 +4,7 @@ import { buttonVariants } from './ui/Button';
 import { getServerSession } from 'next-auth';
 import { authOptions } from '@/lib/auth';
 import { UserAccountNav } from './UserAccountNav';
+import SearchBar from './SearchBar';
 
 const Navbar = async () => {
   const session = await getServerSession(authOptions);
@@ -18,6 +19,9 @@ const Navbar = async () => {
           </p>
         </Link>
 
+        {/* search bar */}
+        <SearchBar />
+        {/* actions */}
         {session?.user ? (
           <UserAccountNav user={session.user} />
         ) : (

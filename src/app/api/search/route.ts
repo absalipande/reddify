@@ -18,5 +18,5 @@ export async function GET(req: Request) {
     take: 5,
   });
 
-  return new Response(JSON.stringify(results), { status: 200 });
+  return new Response(JSON.stringify(results));
 }
